@@ -59,12 +59,12 @@
 #include "Sound.h"
 #include "Timer0.h"
 #include "Timer1.h"
+#include "Pieces.h"
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
 
-int y=0; 
 
 void SysTick_Init(void){
         
@@ -75,16 +75,13 @@ void SysTick_Init(void){
         NVIC_ST_CTRL_R =0x07;
 }
 
-
-void Grid_Init(void)
+void Screen_Init(void)
 {
 	int i=0;
-	
 	for(i=10; i<120; i=i+10)
 	{
 		ST7735_DrawFastVLine(i, 0, 160, 0xFFFF);		//printing vertical lines
 	}
-	
 	for(i=10; i<160; i=i+10)
 	{
 		ST7735_DrawFastHLine(0, i, 120, 0xFFFF);		//printing horizontal lines
@@ -92,35 +89,19 @@ void Grid_Init(void)
 }
 	
 
-struct State{
-	unsigned long x; //x-coordinate
-	unsigned long y; //y-coordinate
-	unsigned long o; //orientation 
-	const unsigned char *image; //ptr -> image
 	
-};
-
-typedef struct State Styp;
-Styp Piece[4];
-	
-	
-
 int main(void){
   PLL_Init(Bus80MHz);       // Bus clock is 80 MHz 
 	Random_Init(1);
-	SysTick_Init();
 	Output_Init();
-//	Grid_Init();
+	SysTick_Init();
+	//Screen_Init();
 	
-	while(1){
-		ST7735_DrawBitmap(52, y, L, 18,8); // player ship middle bottom 
-		ST7735_FillRect(52, y-8, 18, 2, 0);
-//		Grid_Init();
-  }
+	while(1){}
+	
 }
+
 
 
 void SysTick_Handler(void)
-{
-	y++;
-}
+{}

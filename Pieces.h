@@ -1,0 +1,1 @@
+int getBlockType(int pieceType, int rotation, int x, int y);
