@@ -97,10 +97,6 @@ Step5	 LDR R1, =SSI0_SR_R
     
     BX  LR                          ;   return
 
-
-    
-    BX  LR                          ;   return
-
 ; This is a helper function that sends an 8-bit data to the LCD.
 ; Input: R0  8-bit data to transmit
 ; Output: none
@@ -134,8 +130,7 @@ Step1_wd LDR R1, =SSI0_SR_R
 	BX  LR                          ;   return
 
 
-    
-    BX  LR                          ;   return
+
 
 
 ;***************************************************

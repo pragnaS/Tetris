@@ -185,9 +185,8 @@ ARM Macro Assembler    Page 3
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
 ork --depend=.\print.d -o.\print.o -I.\RTE\_SpaceInvaders -IC:\Keil_v5\ARM\PACK
 \ARM\CMSIS\5.4.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0\D
-evice\Include\TM4C123 --predefine="__EVAL SETA 1" --predefine="__UVISION_VERSIO
-N SETA 526" --predefine="_RTE_ SETA 1" --predefine="TM4C123GH6PM SETA 1" --list
-=.\print.lst Print.s
+evice\Include\TM4C123 --predefine="__UVISION_VERSION SETA 526" --predefine="_RT
+E_ SETA 1" --predefine="TM4C123GH6PM SETA 1" --list=.\print.lst Print.s
 
 
 
@@ -289,4 +288,4 @@ Symbol: ST7735_OutString
       At line 126 in file Print.s
 Comment: ST7735_OutString used once
 2 symbols
-345 symbols in table
+344 symbols in table

@@ -61,6 +61,8 @@
 #include "Timer1.h"
 #include "Pieces.h"
 
+int score[5]={'S', 'C', 'O', 'R', 'E'};
+
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
@@ -78,24 +80,40 @@ void SysTick_Init(void){
 void Screen_Init(void)
 {
 	int i=0;
-	for(i=10; i<120; i=i+10)
+	for(i=10; i<100; i=i+10)
 	{
 		ST7735_DrawFastVLine(i, 0, 160, 0xFFFF);		//printing vertical lines
 	}
 	for(i=10; i<160; i=i+10)
 	{
-		ST7735_DrawFastHLine(0, i, 120, 0xFFFF);		//printing horizontal lines
+		ST7735_DrawFastHLine(0, i, 90, 0xFFFF);		//printing horizontal lines
 	}
+		
+		ST7735_DrawFastVLine(100, 40, 20, 0xFFFF);	//printing the score board
+		ST7735_DrawFastHLine(100, 40, 20, 0xFFFF);
+		ST7735_DrawFastVLine(120, 40, 20, 0xFFFF);
+		ST7735_DrawFastHLine(100, 60, 20, 0xFFFF);
+		
+		ST7735_SetCursor(100,40);
+		ST7735_OutString("SCORE");
+//			for(i=60; i<110; i=i+10){
+//				ST7735_OutChar(score[i]); 
+//				ST7735_SetTextColor(0xFFFF);
+					
+	//}
 }
 	
 
 	
 int main(void){
+
+
   PLL_Init(Bus80MHz);       // Bus clock is 80 MHz 
 	Random_Init(1);
 	Output_Init();
 	SysTick_Init();
-	//Screen_Init();
+	Screen_Init();
+	Sound_Init();
 	
 	while(1){}
 	
