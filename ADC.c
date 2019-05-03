@@ -42,3 +42,7 @@ uint32_t ADC_In(void){
 	
 }
 
+uint32_t Convert(uint32_t input){
+  return (0.4636*input + (46.138));
+}
+

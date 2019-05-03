@@ -60,16 +60,43 @@
 #include "Timer0.h"
 #include "Timer1.h"
 #include "Pieces.h"
+#include "tetris_grid.h"
+#include <stdio.h> 
+#include <stdlib.h> 
 
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
 
+uint32_t ADCStatus;
+int random=0;
+
+struct State{
+	int posx;
+	int posy;
+	int type;				//0: Square, 1: L-piece, 2: Z-piece, 3: T-piece, 4: I-piece
+	int orientation; //0,1,2 or 3
+};
+
+typedef struct State STyp;
+STyp PIECE[5];
+
+void PIECE_Init()
+{
+	for(int i=0; i<5; i++)
+	{
+		PIECE[i].posx=3;
+		PIECE[i].posy=0;
+		PIECE[i].orientation=0;
+		PIECE[i].type = i;
+	}
+}
+
 
 void SysTick_Init(void){
-        
+	
         NVIC_ST_CTRL_R =0; //Disable SysTick during setup
-        NVIC_ST_RELOAD_R = 1333333; //maximum reload value
+        NVIC_ST_RELOAD_R = 0xFFFFFF; //maximum reload value
         NVIC_ST_CURRENT_R = 0; //any write to current clears it
         //NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0x20000000;
         NVIC_ST_CTRL_R =0x07;
@@ -88,20 +115,57 @@ void Screen_Init(void)
 	}
 }
 	
-
+void PortF_Init()
+{
+	volatile int delay;
+	SYSCTL_RCGCGPIO_R |=0x20;
+	delay++;
+	delay++;
+	delay++;
+	GPIO_PORTF_DIR_R |=0x0E;
+	GPIO_PORTF_DEN_R |=0x0E;
+}
 	
 int main(void){
   PLL_Init(Bus80MHz);       // Bus clock is 80 MHz 
 	Random_Init(1);
+//	ADC_Init();
 	Output_Init();
+	Screen_Init();
+	PIECE_Init();
 	SysTick_Init();
-	//Screen_Init();
+	int random = 0;
+	EnableInterrupts();
 	
-	while(1){}
+	while(1){
+		
+		while(isGameOver()==0)
+		{
+			ST7735_FillScreen(0);
+			Screen_Init();
+			DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
+			
+		}
+		
+		//Print Final Message
+	}
 	
 }
 
 
 
 void SysTick_Handler(void)
-{}
+{
+	
+	if(isMovePossible(PIECE[random].posx, PIECE[random].posy+3, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
+	{
+		PIECE[random].posy = PIECE[random].posy +2;
+		DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
+	}	
+	else
+	{
+		Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);
+		void DeletePossibleLines();
+	}
+	
+}
