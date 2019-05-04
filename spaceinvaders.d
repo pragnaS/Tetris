@@ -9,7 +9,6 @@
 .\spaceinvaders.o: Sound.h
 .\spaceinvaders.o: Timer0.h
 .\spaceinvaders.o: Timer1.h
-.\spaceinvaders.o: Pieces.h
 .\spaceinvaders.o: tetris_grid.h
 .\spaceinvaders.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdio.h
 .\spaceinvaders.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdlib.h

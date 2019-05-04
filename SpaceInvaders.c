@@ -59,7 +59,6 @@
 #include "Sound.h"
 #include "Timer0.h"
 #include "Timer1.h"
-#include "Pieces.h"
 #include "tetris_grid.h"
 #include <stdio.h> 
 #include <stdlib.h> 
@@ -70,7 +69,7 @@ void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
 
 uint32_t ADCStatus;
-int random=0;
+int random=0, key=0;
 
 struct State{
 	int posx;
@@ -116,15 +115,16 @@ void Screen_Init(void)
 	}
 }
 	
-void PortF_Init()
+void PortE_Init()
 {
 	volatile int delay;
-	SYSCTL_RCGCGPIO_R |=0x20;
+	SYSCTL_RCGCGPIO_R |=0x10;
+	delay++;
 	delay++;
 	delay++;
 	delay++;
 	GPIO_PORTF_DIR_R |=0x0E;
-	GPIO_PORTF_DEN_R |=0x0E;
+	GPIO_PORTF_DEN_R |=0x01;
 }
 	
 int main(void){
@@ -137,40 +137,43 @@ int main(void){
 	Screen_Init();
 	PIECE_Init();
 	SysTick_Init();
+	Grid_Init();
+	PortE_Init();
 	//Sound_Init();
-	int random = 0;
 	EnableInterrupts();
 	
 	while(1){
 		
 		while(isGameOver()==0)
 		{
-			ST7735_FillScreen(0);
-			Screen_Init();
+			random = Random()%5;
 			DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
 			
+			while(isMovePossible(PIECE[random].posx, PIECE[random].posy+2, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
+			{
+				PIECE[random].posy = PIECE[random].posy +2;
+				for(int delay=0; delay<1000000; delay++){} //delay
+				DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
+				for(int delay=0; delay<1000000; delay++){} //delay
+			}
+			
+			Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);		//if piece cannot move further, store it in the grid
+			
 		}
-		
-		//Print Final Message
 	}
-	
+
 }
 
-
-
-void SysTick_Handler(void)
+void SysTick_Handler()
 {
-	
-	if(isMovePossible(PIECE[random].posx, PIECE[random].posy+3, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
+	key=GPIO_PORTE_DATA_R;								//if PE1 is pressed, change orientation of piece
+	if(key==1)
 	{
-		PIECE[random].posy = PIECE[random].posy +2;
-		DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
-	}	
-	else
-	{
-		Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);
-		void DeletePossibleLines();
+		if(PIECE[random].orientation==3)
+			PIECE[random].orientation=0;
+		else
+			PIECE[random].orientation++;
 	}
-	
+
 }
 
