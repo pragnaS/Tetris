@@ -69,7 +69,7 @@ void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
 
 uint32_t ADCStatus;
-int random=0, key=0;
+volatile int random=0, key=0;
 
 struct State{
 	int posx;
@@ -123,8 +123,8 @@ void PortE_Init()
 	delay++;
 	delay++;
 	delay++;
-	GPIO_PORTF_DIR_R |=0x0E;
-	GPIO_PORTF_DEN_R |=0x01;
+	GPIO_PORTE_DIR_R |=0x0E;
+	GPIO_PORTE_DEN_R |=0x01;
 }
 	
 int main(void){
@@ -148,17 +148,26 @@ int main(void){
 		{
 			random = Random()%5;
 			DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
+			DrawGrid();
+			for(int delay=0; delay<1000000; delay++){} //delay
 			
 			while(isMovePossible(PIECE[random].posx, PIECE[random].posy+2, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
 			{
+				ST7735_FillScreen(0);
+				Screen_Init();
+				DrawGrid();
+				for(int delay=0; delay<1000000; delay++){} //delay
 				PIECE[random].posy = PIECE[random].posy +2;
 				for(int delay=0; delay<1000000; delay++){} //delay
 				DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
 				for(int delay=0; delay<1000000; delay++){} //delay
+				DrawGrid();
 			}
 			
 			Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);		//if piece cannot move further, store it in the grid
-			
+			PIECE_Init(); //restoring intial state
+			DrawGrid();
+			for(int delay=0; delay<1000000; delay++){} //delay
 		}
 	}
 
@@ -166,7 +175,7 @@ int main(void){
 
 void SysTick_Handler()
 {
-	key=GPIO_PORTE_DATA_R;								//if PE1 is pressed, change orientation of piece
+	key=GPIO_PORTE_DATA_R;								//if PE0 is pressed, change orientation of piece
 	if(key==1)
 	{
 		if(PIECE[random].orientation==3)

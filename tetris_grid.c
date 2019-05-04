@@ -213,14 +213,12 @@ void Grid_Init(void)
 void Store_Piece(int x, int y, int pieceType, int rotation)
 {
 	int pieceI=0, pieceJ=0;
-	for(volatile int i=x; i<x+3; i++)
+	for(volatile int i=x, pieceI=0; i<x+3; i++, pieceI++)
 	{
-		for(volatile int j=y; j<y+3; j++)
+		for(volatile int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
 			grid[i][j]=pieces[pieceType][rotation][pieceI][pieceJ];
-			pieceJ++;	
 		}
-		pieceI++;
 	}
 }
 
@@ -230,7 +228,7 @@ int isGameOver(void)
 {
 	for(int i=0; i<GRID_WIDTH; i++)
 	{
-		volatile int check = grid[i][0];
+		volatile int check = grid[i][1];
 		if(check!=0)
 		{
 			return 1;
@@ -329,9 +327,9 @@ void DrawPiece(int type, int orientation, int x, int y)
 {
 	int pieceI=0, pieceJ=0;
 	
-	for(int i=x; i<x+3; i++)
+	for(int i=x, pieceI=0; i<x+3; i++, pieceI++)
 	{
-		for(int j=y; j<y+3; j++)
+		for(int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
 			if(pieces[type][orientation][pieceI][pieceJ]!=0)
 			{
@@ -346,9 +344,7 @@ void DrawPiece(int type, int orientation, int x, int y)
 				if(type==4)
 					ST7735_DrawBitmap(10*i, 10*j, orange, 10,10);
 			}
-			pieceJ++;
 		}
-		pieceI++;
 	}
 }
 
@@ -359,8 +355,6 @@ void DrawGrid(void)
 	{
 		for(int j=0; j<GRID_HEIGHT; j++)
 		{
-			if(grid[i][j]==0)
-				ST7735_DrawBitmap(10*i, 10*j, black,10 ,10);
 			if(grid[i][j]==1)
 				ST7735_DrawBitmap(10*i, 10*j, red, 10,10);
 			if(grid[i][j]==2)
@@ -375,6 +369,8 @@ void DrawGrid(void)
 		}
 	}
 }
+
+//This function restores the initial position of the new random piece
 
 
 
