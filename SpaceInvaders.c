@@ -109,7 +109,7 @@ void PIECE_Init()
 void SysTick_Init(void){
 	
         NVIC_ST_CTRL_R =0; //Disable SysTick during setup
-        NVIC_ST_RELOAD_R = 8000000; //maximum reload value
+        NVIC_ST_RELOAD_R = 133333; //maximum reload value
         NVIC_ST_CURRENT_R = 0; //any write to current clears it
         //NVIC_SYS_PRI3_R = (NVIC_SYS_PRI3_R & 0x00FFFFFF) | 0x20000000;
         NVIC_ST_CTRL_R =0x07;
@@ -174,7 +174,6 @@ int main(void){
 				for(int delay=0; delay<1000000; delay++){} //delay
 				DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
 				for(int delay=0; delay<1000000; delay++){} //delay
-				//DrawGrid();
 			}
 			
 			Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);		//if piece cannot move further, store it in the grid

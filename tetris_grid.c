@@ -217,7 +217,10 @@ void Store_Piece(int x, int y, int pieceType, int rotation)
 	{
 		for(volatile int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
-			grid[i][j]=pieces[pieceType][rotation][pieceJ][pieceI];
+			if(grid[i][j]!=0)
+				continue;
+			else
+				grid[i][j]=pieces[pieceType][rotation][pieceJ][pieceI];
 		}
 	}
 }

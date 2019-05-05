@@ -200,7 +200,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGDARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=932,156,1107,388,1)(9106=857,236,1066,392,0)(9104=555,507,961,788,1)(9107=86,140,539,411,0)(9109=180,121,586,402,0)(9102=1121,300,1527,584,1)</Name>
+          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=827,244,1002,476,1)(9106=857,236,1066,392,0)(9104=555,507,961,788,1)(9107=86,140,539,411,0)(9109=180,121,586,402,0)(9102=1121,300,1527,584,1)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -238,17 +238,7 @@
         <Ww>
           <count>0</count>
           <WinNumber>1</WinNumber>
-          <ItemText>random</ItemText>
-        </Ww>
-        <Ww>
-          <count>1</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>grid[i][j]</ItemText>
-        </Ww>
-        <Ww>
-          <count>2</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>pieces[type][orientation][pieceI][pieceJ]</ItemText>
+          <ItemText>rotationKey</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>
