@@ -69,7 +69,20 @@ void EnableInterrupts(void);  // Enable interrupts
 void Delay100ms(uint32_t count); // time delay in 0.1 seconds
 
 uint32_t ADCStatus;
-volatile int random=0, key=0;
+volatile int random=0, rotationKey=0;
+
+const unsigned short pink[] = {
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+ 0xCD7F, 0xCD7F, 0xCD7F, 0xCD7F,
+
+};
+
+
 
 struct State{
 	int posx;
@@ -146,27 +159,27 @@ int main(void){
 		
 		while(isGameOver()==0)
 		{
-			random = Random()%5;
+			random = Random32()%5;
 			DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
 			DrawGrid();
 			for(int delay=0; delay<1000000; delay++){} //delay
 			
-			while(isMovePossible(PIECE[random].posx, PIECE[random].posy+2, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
+			while(isMovePossible(PIECE[random].posx, PIECE[random].posy+1, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
 			{
 				ST7735_FillScreen(0);
 				Screen_Init();
 				DrawGrid();
 				for(int delay=0; delay<1000000; delay++){} //delay
-				PIECE[random].posy = PIECE[random].posy +2;
+				PIECE[random].posy = PIECE[random].posy +1;
 				for(int delay=0; delay<1000000; delay++){} //delay
 				DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
 				for(int delay=0; delay<1000000; delay++){} //delay
-				DrawGrid();
+				//DrawGrid();
 			}
 			
 			Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);		//if piece cannot move further, store it in the grid
-			PIECE_Init(); //restoring intial state
 			DrawGrid();
+			PIECE_Init(); //restoring intial state
 			for(int delay=0; delay<1000000; delay++){} //delay
 		}
 	}
@@ -175,8 +188,8 @@ int main(void){
 
 void SysTick_Handler()
 {
-	key=GPIO_PORTE_DATA_R;								//if PE0 is pressed, change orientation of piece
-	if(key==1)
+	rotationKey=GPIO_PORTE_DATA_R;								//if PE0 is pressed, change orientation of piece
+	if(rotationKey==1)
 	{
 		if(PIECE[random].orientation==3)
 			PIECE[random].orientation=0;

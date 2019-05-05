@@ -155,9 +155,9 @@ char pieces[5][4][3][3]= //5 pieces, 4 rotations, 3 by 3 shape
 			{4,4,4}
 		},
 		{
+			{0,0,0},
 			{4,4,4},
-			{0,4,0},
-			{0,0,0}
+			{0,4,0}
 		},
 		{
 			{0,0,4},
@@ -179,8 +179,8 @@ char pieces[5][4][3][3]= //5 pieces, 4 rotations, 3 by 3 shape
 		},
 		{
 			{0,0,0},
-			{5,5,5},
-			{0,0,0}
+			{0,0,0},
+			{5,5,5}
 		},
 		{
 			{0,5,0},
@@ -189,8 +189,8 @@ char pieces[5][4][3][3]= //5 pieces, 4 rotations, 3 by 3 shape
 		},
 		{
 			{0,0,0},
-			{5,5,5},
-			{0,0,0}
+			{0,0,0},
+			{5,5,5}
 		}
 	}
 };
@@ -209,7 +209,7 @@ void Grid_Init(void)
 	}
 }
 
-//This function stores the piece in the grid by filling the appropriate blocks with FILLED
+//This function stores the piece in the grid by filling the appropriate blocks
 void Store_Piece(int x, int y, int pieceType, int rotation)
 {
 	int pieceI=0, pieceJ=0;
@@ -217,7 +217,7 @@ void Store_Piece(int x, int y, int pieceType, int rotation)
 	{
 		for(volatile int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
-			grid[i][j]=pieces[pieceType][rotation][pieceI][pieceJ];
+			grid[i][j]=pieces[pieceType][rotation][pieceJ][pieceI];
 		}
 	}
 }
@@ -284,26 +284,24 @@ int isFreeBlock(int x, int y)
 int isMovePossible(int x, int y, int pieceType, int rotation)
 {
 	int pieceI=0, pieceJ=0;
-	for(int i=x; i<x+3; i++)
+	for(int i=x, pieceI=0; i<x+3; i++, pieceI++)
 	{
-		for(int j=y; j<y+3; j++)
+		for(int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
 			//checking if piece is outside the board
 			if(i<0 || i>GRID_WIDTH || j>GRID_HEIGHT)
 			{
-				if(getBlockType(pieceType, rotation, pieceI, pieceJ)!=0)
+				if(getBlockType(pieceType, rotation, pieceJ, pieceI)!=0)
 					return 0; 	//move is not possible
 			}
 			
 			//checking if piece has collisioned with a filled block
 			if(j>0)
 			{
-				if(getBlockType(pieceType, rotation, pieceI, pieceJ)!=0 && isFreeBlock(i,j)==1)
+				if(getBlockType(pieceType, rotation, pieceJ, pieceI)!=0 && grid[i][j]!=0)
 					return 0;  //move not possible
 			}
-			pieceJ++;
 		}
-		pieceI++;
 	}
 	return 1; //move is possible
 }
@@ -331,7 +329,7 @@ void DrawPiece(int type, int orientation, int x, int y)
 	{
 		for(int j=y, pieceJ=0; j<y+3; j++, pieceJ++)
 		{
-			if(pieces[type][orientation][pieceI][pieceJ]!=0)
+			if(pieces[type][orientation][pieceJ][pieceI]!=0)
 			{
 				if(type==0)
 					ST7735_DrawBitmap(10*i, 10*j, red, 10,10);
@@ -353,7 +351,7 @@ void DrawGrid(void)
 {
 	for(int i=0; i<GRID_WIDTH; i++)
 	{
-		for(int j=0; j<GRID_HEIGHT; j++)
+		for(int j=0; j<GRID_HEIGHT+1; j++)
 		{
 			if(grid[i][j]==1)
 				ST7735_DrawBitmap(10*i, 10*j, red, 10,10);
