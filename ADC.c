@@ -3,6 +3,8 @@
 #include <stdint.h>
 #include "../inc/tm4c123gh6pm.h"
 
+
+
 void ADC_Init(void){ 
 	volatile int delay;
 	SYSCTL_RCGCGPIO_R |=0x08; //activate clocl for Port D
@@ -42,7 +44,9 @@ uint32_t ADC_In(void){
 	
 }
 
-uint32_t Convert(uint32_t input){
-  return (0.4636*input + (46.138));
-}
+
+
+
+
+
 

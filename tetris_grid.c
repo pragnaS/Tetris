@@ -1,6 +1,7 @@
 #include "../inc/tm4c123gh6pm.h"
 #include <stdint.h>
 #include "tetris_grid.h"
+#include "ST7735.h"
 
 #define GRID_WIDTH 12		//board width in blocks
 #define GRID_HEIGHT 16		//board height in blocks

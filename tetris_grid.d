@@ -2,3 +2,4 @@
 .\tetris_grid.o: ../inc/tm4c123gh6pm.h
 .\tetris_grid.o: C:\Keil_v5\ARM\ARMCC\Bin\..\include\stdint.h
 .\tetris_grid.o: tetris_grid.h
+.\tetris_grid.o: ST7735.h

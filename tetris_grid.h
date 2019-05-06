@@ -3,4 +3,4 @@ void Store_Piece(int x, int y, int piece, int rotation);
 int isGameOver(void);
 void DeleteLine(int y);
 int isFreeBlock(int x, int y);
-
+int getBlockType(int,int,int,int);
