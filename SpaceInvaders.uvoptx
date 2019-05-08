@@ -204,7 +204,7 @@
         <SetRegEntry>
           <Number>0</Number>
           <Key>DLGDARM</Key>
-          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=1122,80,1297,312,1)(9106=857,236,1066,392,0)(9104=555,507,961,788,1)(9107=666,85,1129,366,1)(9109=180,121,586,402,0)(9102=1121,300,1527,584,1)</Name>
+          <Name>(1010=-1,-1,-1,-1,0)(1007=-1,-1,-1,-1,0)(1008=-1,-1,-1,-1,0)(1009=-1,-1,-1,-1,0)(1012=-1,-1,-1,-1,0)(9108=792,191,967,423,1)(9106=857,236,1066,392,0)(9104=555,507,961,788,1)(9107=666,85,1129,366,1)(9109=180,121,586,402,0)(9102=1121,300,1527,584,1)</Name>
         </SetRegEntry>
         <SetRegEntry>
           <Number>0</Number>
@@ -252,17 +252,12 @@
         <Ww>
           <count>2</count>
           <WinNumber>1</WinNumber>
-          <ItemText>collision</ItemText>
+          <ItemText>rotationKey,0x0A</ItemText>
         </Ww>
         <Ww>
           <count>3</count>
           <WinNumber>1</WinNumber>
-          <ItemText>wave_index</ItemText>
-        </Ww>
-        <Ww>
-          <count>4</count>
-          <WinNumber>1</WinNumber>
-          <ItemText>data</ItemText>
+          <ItemText>exit_StartScreen,0x0A</ItemText>
         </Ww>
       </WatchWindow1>
       <MemoryWindow1>

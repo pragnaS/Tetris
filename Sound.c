@@ -23,6 +23,6 @@ void Sound_Init(void){
 }
 
 void Sound_Playing(){
-		DAC_Out(newsong[wave_index]);
+		DAC_Out((newsong[wave_index]));
 		wave_index= (wave_index+1)%29686;
 }

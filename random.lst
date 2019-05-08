@@ -57,7 +57,7 @@ ARM Macro Assembler    Page 1
    44 0000001C 4A05    Random  LDR              R2,=M       ; R2 = &M, R4 point
                                                             s to M
    45 0000001E 6810            LDR              R0,[R2]     ; R0=M
-   46 00000020 4905            LDR              R1,=1664525
+   46 00000020 4907            LDR              R1,= 4551238 ;1664525
    47 00000022 FB00 F001       MUL              R0,R0,R1    ; R0 = 1664525*M
    48 00000026 4905            LDR              R1,=1013904223
    49 00000028 4408            ADD              R0,R1       ; 1664525*M+1013904
@@ -77,6 +77,7 @@ ARM Macro Assembler    Page 2
               00000000 
               0019660D 
               3C6EF35F 
+              00457246 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M4 --apcs=interw
 ork --depend=.\random.d -o.\random.o -I.\RTE\_SpaceInvaders -IC:\Keil_v5\ARM\PA
 CK\ARM\CMSIS\5.4.0\CMSIS\Core\Include -IC:\Keil_v5\ARM\PACK\Keil\TM4C_DFP\1.1.0

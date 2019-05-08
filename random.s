@@ -43,7 +43,7 @@ Random32 LDR R2,=M    ; R2 = &M, R4 points to M
 ; from Numerical Recipes by Press et al.
 Random LDR R2,=M     ; R2 = &M, R4 points to M
        LDR R0,[R2]   ; R0=M
-       LDR R1,=1664525
+       LDR R1,= 4551238      ;1664525
        MUL R0,R0,R1  ; R0 = 1664525*M
        LDR R1,=1013904223
        ADD R0,R1     ; 1664525*M+1013904223 
