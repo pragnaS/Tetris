@@ -251,26 +251,33 @@ void DeleteLine(int y)
 	{
 		for(int j=0; j<GRID_WIDTH; j++)
 		{
-			grid[j][i]=grid[j][i-1];
+			grid[i][j]=grid[i-1][j];
 		}
 	}
 }
 
 //This function deletes all the lines that should be removed
-void DeletePossibleLines()
+int DeletePossibleLines()
 {
-	for(int j=0; j<GRID_HEIGHT; j++)
+	int line=0;
+	for(int i=0; i<GRID_HEIGHT; i++)
 	{
-		int i=0;
-		while(i<GRID_WIDTH)
+		int j=0;
+		
+		while(j<GRID_WIDTH-1)
 		{
 			if(grid[i][j]==0)
 				break;
-			i++;
+			j++;
 		}
-		if(i==GRID_WIDTH)
-			DeleteLine(j);
+		
+		if(j==GRID_WIDTH-1)
+		{
+			DeleteLine(i);
+			line++;
+		}
 	}
+	return line;
 }
 
 //This function checks if a block in the grid is free or not 

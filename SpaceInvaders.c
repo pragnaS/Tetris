@@ -68,16 +68,17 @@ uint32_t Position, prevPosition=0;    // 32-bit fixed-point 0.001 cm
 	
 void DisableInterrupts(void); // Disable interrupts
 void EnableInterrupts(void);  // Enable interrupts
-void Delay100ms(uint32_t count); // time delay in 0.1 seconds
+void Delay100ms(uint32_t); // time delay in 0.1 seconds
 void ADC_Init(void);
 void DrawGrid(void);
-void DeletePossibleLines(void);
+int DeletePossibleLines(void);
 int isMovePossible(int,int,int,int);
 uint32_t ADC_In(void);
 void DrawPiece(int,int,int,int);
 
 
 volatile int random=0, rotationKey=0, exit_StartScreen=0, score=0;
+int filled_Rows=0;
 
 
 const unsigned short griddy[] = {
@@ -3411,8 +3412,7 @@ struct State{
 typedef struct State STyp;
 STyp PIECE[5];
 
-void PIECE_Init()
-{
+void PIECE_Init(){
 	for(int i=0; i<5; i++)
 	{
 		PIECE[i].posx=3;
@@ -3433,8 +3433,7 @@ void SysTick_Init(void){
 }
 
 
-void Screen_Init(void)
-{
+void Screen_Init(void){
 	ST7735_DrawBitmap(0,160,griddy,90,160);			//printing grid image to screen
 	
 	ST7735_DrawFastVLine(100,40,20,0xFFFF);			//printing score board
@@ -3446,10 +3445,12 @@ void Screen_Init(void)
 	ST7735_SetTextColor(0xFFFF);
 	ST7735_OutString("pts!");
 	
+	ST7735_SetCursor(18,5);
+	LCD_OutDec(filled_Rows);
+	
 }
 
-void PortE_Init()
-{
+void PortE_Init(){
 	volatile int delay;
 	SYSCTL_RCGCGPIO_R |=0x10;
 	delay++;
@@ -3459,20 +3460,9 @@ void PortE_Init()
 	GPIO_PORTE_DIR_R |=0x0C;
 	GPIO_PORTE_DEN_R |=0x03;
 }
-	
-/*void PortF_Init()
-{
-	volatile int delay;
-	GPIO_PORTF_LOCK_R = GPIO_LOCK_KEY;
-	GPIO_PORTF_CR_R = 0x11;
-	GPIO_PORTE_DIR_R |=0x00;
-	GPIO_PORTE_DEN_R |=0x011;
-	GPIO_PORTF_PUR_R = 0x11;
-}*/
 
 //This function increments the x position depending on the position of the slidepot
-void IncrementPosX()
-{
+void IncrementPosX(){
 	Position=ADC_In();
 	
 		if(Position>0 && Position<=490)
@@ -3510,9 +3500,6 @@ void IncrementPosX()
 }
 
 
-
-
-
 int main(void){
 
 	PLL_Init(Bus80MHz);       // Bus clock is 80 MHz 
@@ -3545,35 +3532,33 @@ int main(void){
 			
 				while(isMovePossible(PIECE[random].posx, PIECE[random].posy+1, PIECE[random].type, PIECE[random].orientation))		//checking next position in grid
 				{
-			
-				Screen_Init();
-				DrawGrid();
-				for(int delay=0; delay<1000; delay++){} //delay
-				PIECE[random].posy = PIECE[random].posy +1;
-				DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
-				for(int delay=0; delay<5000000; delay++){} //delay
+					Screen_Init();
+					DrawGrid();
+					for(int delay=0; delay<1000; delay++){} //delay
+					PIECE[random].posy = PIECE[random].posy +1;
+					DrawPiece(PIECE[random].type, PIECE[random].orientation, PIECE[random].posx, PIECE[random].posy);
+					for(int delay=0; delay<5000000; delay++){} //delay
 				}
 			
-				//for(int delay=0; delay<1000; delay++){} //delay
 				Store_Piece(PIECE[random].posx, PIECE[random].posy, PIECE[random].type, PIECE[random].orientation);		//if piece cannot move further, store it in the grid
 				DrawGrid();
 				PIECE_Init(); //restoring intial state
-				//for(int delay=0; delay<100000; delay++){} //delay 
-				
-				DeletePossibleLines();
-				for(int delay=0; delay<100; delay++);
+								
+				filled_Rows = DeletePossibleLines();
+				for(int delay=0; delay<100; delay++); //delay
+				score=score+filled_Rows;
 				DrawGrid();
-				
 			}
 		
 			while(exit_StartScreen==0)
 			{
-				ST7735_DrawBitmap(0,160,gameOver,120, 160);      //Print game over screen
+				ST7735_DrawBitmap(0,160,gameOver,120,160);      //Print game over screen
 			}
 		
 		}
 	}
 }
+
 
 void SysTick_Handler()
 {
